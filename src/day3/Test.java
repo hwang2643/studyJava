@@ -2,14 +2,16 @@ package day3;
 
 public class Test {
 	public static void main(String[] args) {
-		int n = 125;
+		int n = 552;
 		String binary = Integer.toBinaryString(n);
 		String octal = Integer.toOctalString(n);
 		String hex = Integer.toHexString(n);
 		
 		System.out.println(binary);
 		System.out.println(octal);
+//		System.out.printf("%o\n", n);  // 8진법 출력문
 		System.out.println(hex);
+//		System.out.printf("%x\n", n);  // 16진법 출력문
 		int tmp = n;
 		int b2 = 0;
 		int o8 = 0;
@@ -43,21 +45,16 @@ public class Test {
 		for(int i = 0; true; i++) {
 			h16 = tmp%16;
 			tmp /= 16;
-			s16 = Integer.toString(h16) + s16;
-			if(h16 == 10) {
-				String a = "a";
-				s16 = a + s16;;
-			} else if(h16 == 11) {
-				s16 = "b";
-			} else if(h16 == 12) {
-				s16 = "c";
-			} else if(h16 == 13) {
-				String d = "d";
-				s16 = d + s16;
-			} else if(h16 == 14) {
-				s16 = "e";
-			} else if(h16 == 15) {
-				s16 = "f";
+			if(s16.equals("10")) {
+				s16 = Integer.toString(h16) + "a";
+			} else if(s16.equals("11")) {
+				s16 = Integer.toString(h16) + "b"; 
+			} else if(s16.equals("12")) {
+				s16 = Integer.toString(h16) + "c";
+			} else if(s16.equals("13")) {
+				s16 = Integer.toString(h16) + "d";
+			} else if(s16.equals("14")) {
+				s16 = Integer.toString(h16) + "e";
 			} else {
 				s16 = Integer.toString(h16) + s16;
 			}
@@ -65,9 +62,7 @@ public class Test {
 				break;
 			}
 		}
-		String d = "d";
-		s16 = d + s16;
-		System.out.println("16진법 : " + h16);
+		System.out.println("16진법 : " + s16);
 		
 		
 		

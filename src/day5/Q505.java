@@ -11,13 +11,20 @@ import java.util.Scanner;
  * (실행결과) 문자입력 : ! (엔터)
  * 			!
  */
+
+/*
+ * (참고)
+ * byte a = 2;
+ * byte b = 3;
+ * byte c = a + b;  // ERR. (int) + (int) 가 됨
+ */
 public class Q505 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("문자입력 : ");
 		String s = sc.next();
 		char c = s.charAt(0);
-		if(c >= 65 && c <= 90) {
+		if(c >= 'A' && c <= 'Z') {
 			c = (char)(c + 32);
 			System.out.println(c);
 		} else {

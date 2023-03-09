@@ -17,10 +17,10 @@ public class Q504 {
 			String s = sc.next();
 			char c = s.charAt(0);
 			
-			if(c>=65 && c<=90) {
+			if(c>='A' && c<='Z') {
 				System.out.println(c + "는 대문자임");
 				break;
-			} else if(c>=97 && c<=122){
+			} else if(c>='a' && c<='z'){
 				System.out.println(c + "는 소문자임");
 				break;
 			} else {
