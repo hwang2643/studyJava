@@ -12,13 +12,13 @@ public class Q714 {
 			for(int j = in - i; j>=0; j--) {
 				System.out.print(" ");
 			}
-			int n1 = 0;
+			int sum = 0;
 			for(int j = 1; j<=i; j++) {
 				System.out.print(" " + n);
-				n1+=n;
+				sum+=n;
 				n++;
 			}
-			System.out.println(" " + n1);
+			System.out.println(" " + sum);
 			System.out.println();
 		}
 	}
