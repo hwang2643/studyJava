@@ -41,7 +41,6 @@ public class Ex609 {
 				}
 				System.out.println();
 			}
-			
 		}
 	}
 }
