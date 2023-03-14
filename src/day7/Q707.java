@@ -11,7 +11,7 @@ public class Q707 {
 		for(int i = 1; i<=in; i++) {
 			for(int j = in; j>=i; j--) {
 				System.out.print(n + " ");
-				n += 1;
+				n++;
 			}
 			System.out.println();
 		}

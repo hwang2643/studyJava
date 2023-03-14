@@ -2,20 +2,23 @@ package day7;
 
 import java.util.Scanner;
 
-public class Q712 {
+public class Q713 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("입력 : ");
 		int in = sc.nextInt();
-		int n = 1;
+		int n;
 		for(int i = 1; i<=in; i++) {
-			for(int j = in-n; j>=0; j--) {
-				System.out.print(" ");
-			}
 			for(int j = 1; j<=i; j++) {
-				System.out.print(i + " ");
+				if(i%2==0 && j%2==0) {
+					n=1;
+				}else if(i%2!=0 && j%2!=0){
+					n=1;
+				} else {
+					n=0;
+				}
+				System.out.print(n);
 			}
-			n++;
 			System.out.println();
 		}
 	}
