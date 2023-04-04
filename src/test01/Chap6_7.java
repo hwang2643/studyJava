@@ -21,3 +21,4 @@ public class Chap6_7 {
 		System.out.println(p.getDistance(2,2));
 	}
 }
+

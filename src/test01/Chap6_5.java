@@ -28,3 +28,4 @@ public class Chap6_5 {
 		System.out.println(s.info());
 	}
 }
+
