@@ -25,4 +25,3 @@ public class Q902 {
 		System.out.println("세 정수의 합이 짝수임!");
 	}
 }
-

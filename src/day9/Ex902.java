@@ -10,7 +10,7 @@ public class Ex902 {
 		boolean b = false;
 		for(int i = 2; i<num; i++) {
 			if(num%i == 0) {
-				b = !b;
+				b = true;
 				break;
 			}
 		}
@@ -21,4 +21,3 @@ public class Ex902 {
 		}
 	}
 }
-

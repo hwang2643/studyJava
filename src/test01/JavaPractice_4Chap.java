@@ -201,21 +201,21 @@ public class JavaPractice_4Chap {
 		// 4-14
 		// 1~100 answer . 사이의 임의의 값을 얻어서 에 저장한다
 		
-		int answer = (int)(Math.random()*100);
-		int input = 0; // 사용자입력을 저장할 공간
-		int count = 0; // 시도횟수를 세기위한 변수
-		System.out.println(answer);
-		Scanner sc = new Scanner(System.in); 
-		do {
-			count++;
-			System.out.print("1 과 100 사이의 값을 입력하세요 :"); 
-			input = sc.nextInt(); // input . 입력받은 값을 변수 에 저장한다
-			if(input == answer) {
-				System.out.println("정답!");
-				System.out.println("시도 횟수는 " + count + "번 입니다.");
-				break;
-			}
-			} while(true); // 무한반복문
+//		int answer = (int)(Math.random()*100);
+//		int input = 0; // 사용자입력을 저장할 공간
+//		int count = 0; // 시도횟수를 세기위한 변수
+//		System.out.println(answer);
+//		Scanner sc = new Scanner(System.in); 
+//		do {
+//			count++;
+//			System.out.print("1 과 100 사이의 값을 입력하세요 :"); 
+//			input = sc.nextInt(); // input . 입력받은 값을 변수 에 저장한다
+//			if(input == answer) {
+//				System.out.println("정답!");
+//				System.out.println("시도 횟수는 " + count + "번 입니다.");
+//				break;
+//			}
+//			} while(true); // 무한반복문
 		
 		// 4-15
 //		int number = 13531;
