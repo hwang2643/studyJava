@@ -11,4 +11,3 @@ public class Chap6_6 {
 
 	}
 }
-

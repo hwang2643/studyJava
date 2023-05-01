@@ -31,4 +31,3 @@ package test01;
 //		System.out.println("평균 :"+s.getAverage());
 //	}
 //}
-

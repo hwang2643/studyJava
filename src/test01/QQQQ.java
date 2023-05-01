@@ -42,7 +42,7 @@ public class QQQQ {
 		}
 		// 배열을 생성
 		int[] arr = new int[size];
-		// 1~100 소수를 배열에 담고
+		// 1~100 소수를 배열에 담고\
 		int idx = 0;  // 이번에 값이 들어갈 인덱스
 		for(int loop=1; loop<=100; loop++) {
 			int num = loop;
