@@ -5,66 +5,53 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;							
 
-class MemberUpdate {
-	public void mDelete() throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		System.out.println("회원탈퇴 칼럼업데이트");					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
-		Class.forName(driver);					
-		Connection conn = DriverManager.getConnection(url,dbId,dbPw);					
-		System.out.print("아이디 : ");					
-		String myId = sc.next();					
-		System.out.print("비밀번호 : ");					
-		String myPw = sc.next();					
-		String sql1 = "SELECT * FROM member ";					
-		PreparedStatement pstmt1 = conn.prepareStatement(sql1);					
-		ResultSet rs = pstmt1.executeQuery();					
-		boolean b = false;					
-		String secession = "";					
-		while(rs.next()) {					
-			String id = rs.getString("id");				
-			String pw = rs.getString("pass");				
-			secession = rs.getString("secession");				
-			if(id.equals(myId) && pw.equals(myPw))				
-				{			
-					b = true;		
-					break;		
-				}			
-		}					
-		if (!b) {					
-				System.out.println("아이디 또는 비밀번호가 틀렸습니다");			
-			}				
-		if(secession.equals("N")&&b) {					
-				String sql = "UPDATE member SET secession = 'Y' WHERE id = ? and pass = ? AND secession = 'N'";			
-				PreparedStatement pstmt = conn.prepareStatement(sql);			
-				pstmt.setString(1, myId);			
-				pstmt.setString(2, myPw);			
-				pstmt.executeUpdate();			
-				pstmt.close();			
-				System.out.println("탈퇴가 되었습니다");			
-			}				
-		else if (secession.equals("Y")&&b){					
-				System.out.println("이미 탈퇴한 id입니다");			
-			}				
-		rs.close();
-		pstmt1.close();
-		conn.close();	
+	
+class MemberUpdate extends MemberLogin {
+	MemberUpdate(String myId, String myPw, boolean lb) {
+		super(myId, myPw, lb);
 	}
-	public boolean Check(String myId, String myPw) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	static Scanner sc = new Scanner(System.in);
+	static String driver = "oracle.jdbc.driver.OracleDriver";
+	static String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	static String dbId = "project";
+	static String dbPw = "p1234";
+	public void myPageShow() throws Exception {
+		System.out.println("마이페이지");
+        Class.forName(driver);
+        Connection conn = DriverManager.getConnection(url,dbId,dbPw);
+        String sql = "SELECT * FROM member where id = ? ";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,myId);
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()) {
+                String name = rs.getString("name");
+                String nick_name = rs.getString("nick_name");
+                String id = rs.getString("id");
+                String pass = rs.getString("pass");
+                int number_of_login = rs.getInt("number_of_login");
+                if(id.equals(myId)&& pass.equals(myPw)) {
+                        System.out.println(name+"("+nick_name+") "+id+" "+ number_of_login);
+                }
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+    }
+
+	public boolean Check() throws Exception {
+//		Scanner sc = new Scanner(System.in);					
+//		String driver = "oracle.jdbc.driver.OracleDriver";					
+//		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
+//		String dbId = "project";					
+//		String dbPw = "p1234";					
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
 		String sqlA = "SELECT * FROM member";
 		PreparedStatement pstmt = conn.prepareStatement(sqlA);
 		ResultSet rs = pstmt.executeQuery();
+		System.out.print("비밀번호 입력 : ");
+		String myPw = sc.next();
 		boolean b = false;
 		while(rs.next()) {
 			String allId = rs.getString("id");
@@ -79,12 +66,7 @@ class MemberUpdate {
 		conn.close();
 		return b;
 	}
-	public void PwUpdate(String myId, String myPw) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void PwUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -105,12 +87,7 @@ class MemberUpdate {
 		}
 		conn.close();
 	}
-	public void NickNameUpdate(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void NickNameUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -151,12 +128,7 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
-	public void EmailUpdate(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void EmailUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -187,12 +159,7 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
-	public void EmailReceive(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void EmailReceive() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -220,12 +187,7 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
-	public void PhoneUpdate(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void PhoneUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -259,12 +221,7 @@ class MemberUpdate {
 		conn.close();
 		
 	}
-	public void smsReceive(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void smsReceive() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -292,12 +249,7 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
-	public void phoneOwnerUpdate(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void phoneOwnerUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -325,12 +277,7 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
-	public void detailAddressUpdate(String myId) throws Exception {
-		Scanner sc = new Scanner(System.in);					
-		String driver = "oracle.jdbc.driver.OracleDriver";					
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-		String dbId = "project";					
-		String dbPw = "p1234";					
+	public void detailAddressUpdate() throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -358,28 +305,65 @@ class MemberUpdate {
 		pstmt.close();
 		conn.close();
 	}
+	public void delete() throws Exception {
+		Class.forName(driver);					
+		Connection conn = DriverManager.getConnection(url,dbId,dbPw);										
+		System.out.print("비밀번호 : ");					
+		String myPw = sc.next();					
+		String sql1 = "SELECT * FROM member ";					
+		PreparedStatement pstmt1 = conn.prepareStatement(sql1);					
+		ResultSet rs = pstmt1.executeQuery();					
+		boolean b = false;					
+		String secession = "";					
+		while(rs.next()) {					
+			String id = rs.getString("id");				
+			String pw = rs.getString("pass");				
+			secession = rs.getString("secession");				
+			if(id.equals(myId) && pw.equals(myPw))				
+				{			
+					b = true;		
+					break;		
+				}			
+		}					
+		if (!b) {					
+				System.out.println("비밀번호가 틀렸습니다");			
+			}				
+		if(secession.equals("N")&&b) {					
+				String sql = "UPDATE member SET secession = 'Y' WHERE id = ? and pass = ? AND secession = 'N'";			
+				PreparedStatement pstmt = conn.prepareStatement(sql);			
+				pstmt.setString(1, myId);			
+				pstmt.setString(2, myPw);			
+				pstmt.executeUpdate();			
+				pstmt.close();			
+				System.out.println("탈퇴가 되었습니다");			
+			}				
+		else if (secession.equals("Y")&&b){					
+				System.out.println("이미 탈퇴한 id입니다");			
+			}				
+		rs.close();
+		pstmt1.close();
+		conn.close();	
+	}
 }
 
 public class MemberInfo {
 	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		MemberUpdate mem = new MemberUpdate();
-		System.out.print("아이디 : ");
-		String myId = sc.next();
-		System.out.print("비밀번호 입력 : ");
-		String myPw = sc.next();
-		boolean b = mem.Check(myId, myPw);
-		if(b) {
-			mem.PwUpdate(myId, myPw);
-			mem.NickNameUpdate(myId);
-			mem.EmailUpdate(myId);
-			mem.EmailReceive(myId);
-			mem.PhoneUpdate(myId);
-			mem.smsReceive(myId);
-			mem.phoneOwnerUpdate(myId);
-			mem.detailAddressUpdate(myId);
-		}else {
-			System.out.println("비밀번호가 일치하지 않습니다.");
-		}
+//		MemberUpdate mem = new MemberUpdate();
+//		System.out.print("비밀번호 입력 : ");
+//		String myPw = sc.next();
+//		boolean b = mem.Check();
+//		if(b) {
+//			mem.PwUpdate();
+//			mem.NickNameUpdate();
+//			mem.EmailUpdate();
+//			mem.EmailReceive();
+//			mem.PhoneUpdate();
+//			mem.smsReceive();
+//			mem.phoneOwnerUpdate();
+//			mem.detailAddressUpdate();
+//		}else {
+//			System.out.println("비밀번호가 일치하지 않습니다.");
+//		}
 	}
 }
