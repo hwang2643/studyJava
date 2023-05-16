@@ -39,11 +39,6 @@ class MemberUpdate extends MemberLogin {
     }
 
 	public boolean Check() throws Exception {
-//		Scanner sc = new Scanner(System.in);					
-//		String driver = "oracle.jdbc.driver.OracleDriver";					
-//		String url = "jdbc:oracle:thin:@localhost:1521:xe";					
-//		String dbId = "project";					
-//		String dbPw = "p1234";					
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -66,14 +61,10 @@ class MemberUpdate extends MemberLogin {
 		conn.close();
 		return b;
 	}
-	public void PwUpdate() throws Exception {
+	public void PwUpdate(String newPw, String newPwCheck) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
-		System.out.print("새로운 비밀번호 입력 : ");
-		String newPw = sc.next();
-		System.out.print("비밀번호 확인 : ");
-		String newPwCheck = sc.next();
 		if(newPw.equals(newPwCheck)) {
 			String sql = " UPDATE member SET pass = ? WHERE pass = ?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -87,7 +78,7 @@ class MemberUpdate extends MemberLogin {
 		}
 		conn.close();
 	}
-	public void NickNameUpdate() throws Exception {
+	public void NickNameUpdate(String newNickName) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -103,8 +94,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("새로운 닉네임 입력 : ");
-		String newNickName = sc.next();
 		boolean b = true;
 		while(rs.next()) {
 			String allNickName = rs.getString("nick_name");
@@ -128,7 +117,7 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void EmailUpdate() throws Exception {
+	public void EmailUpdate(String newEmail) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		// PreparedStatement
@@ -144,8 +133,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("새로운 이메일 입력 : ");
-		String newEmail = sc.next();
 		String sqlEmailUpdate = " UPDATE member SET email = ?" + 
 							    " WHERE email = ?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sqlEmailUpdate);
@@ -159,7 +146,7 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void EmailReceive() throws Exception {
+	public void EmailReceive(String eReceiveChange) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -173,8 +160,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("이메일 수신동의 : ");
-		String eReceiveChange = sc.next();
 		String sql = " UPDATE member SET email_receive=?" +
 					 " WHERE id = ?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sql);
@@ -187,7 +172,7 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void PhoneUpdate() throws Exception {
+	public void PhoneUpdate(String newTel, String newPhone) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -204,10 +189,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("통신사 : ");
-		String newTel = sc.next();
-		System.out.print("번호 : ");
-		String newPhone = sc.next();
 		String sql = "UPDATE member SET telecom=?, phone=? WHERE id=?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sql);
 		pstmt2.setString(1, newTel);
@@ -221,7 +202,7 @@ class MemberUpdate extends MemberLogin {
 		conn.close();
 		
 	}
-	public void smsReceive() throws Exception {
+	public void smsReceive(String smsReceiveChange) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -235,8 +216,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("sms 수신동의 : ");
-		String smsReceiveChange = sc.next();
 		String sql = " UPDATE member SET sms_receive=?" +
 					 " WHERE id = ?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sql);
@@ -249,7 +228,7 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void phoneOwnerUpdate() throws Exception {
+	public void phoneOwnerUpdate(String phoneOwnerChange) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -263,8 +242,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("휴대폰 소유 : ");
-		String phoneOwnerChange = sc.next();
 		String sql = " UPDATE member SET phone_owner=?" +
 					 " WHERE id = ?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sql);
@@ -277,7 +254,7 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void detailAddressUpdate() throws Exception {
+	public void detailAddressUpdate(String detailAddressChange) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sqlA = "SELECT * FROM member";
@@ -291,8 +268,6 @@ class MemberUpdate extends MemberLogin {
 				break;
 			}
 		}
-		System.out.print("상세 주소 : ");
-		String detailAddressChange = sc.next();
 		String sql = " UPDATE member SET detail_address=?" +
 					 " WHERE id = ?";
 		PreparedStatement pstmt2 = conn.prepareStatement(sql);
@@ -305,11 +280,9 @@ class MemberUpdate extends MemberLogin {
 		pstmt.close();
 		conn.close();
 	}
-	public void delete() throws Exception {
+	public void delete(String myPw) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);										
-		System.out.print("비밀번호 : ");					
-		String myPw = sc.next();					
 		String sql1 = "SELECT * FROM member ";					
 		PreparedStatement pstmt1 = conn.prepareStatement(sql1);					
 		ResultSet rs = pstmt1.executeQuery();					

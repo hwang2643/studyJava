@@ -19,7 +19,7 @@ public class SocialRun {
 //			sb.socialWriterSearch();
 //			sb.socialContentSearch();
 //			sb.socialTitleSearch();
-//			sb.socialDetail();
+			sb.socialDetail();
 		}
 	}
 }

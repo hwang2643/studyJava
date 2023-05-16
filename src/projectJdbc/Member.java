@@ -18,19 +18,19 @@ public class Member {
 			if(s.equals("수정")) {
 				boolean b = mem.Check();
 				if(b) {
-					mem.PwUpdate();
-					mem.NickNameUpdate();
-					mem.EmailUpdate();
-					mem.EmailReceive();
-					mem.PhoneUpdate();
-					mem.smsReceive();
-					mem.phoneOwnerUpdate();
-					mem.detailAddressUpdate();
+//					mem.PwUpdate();
+//					mem.NickNameUpdate();
+//					mem.EmailUpdate();
+//					mem.EmailReceive();
+//					mem.PhoneUpdate();
+//					mem.smsReceive();
+//					mem.phoneOwnerUpdate();
+//					mem.detailAddressUpdate();
 				}else {
 					System.out.println("비밀번호가 일치하지 않습니다.");
 				}
 			}else if(s.equals("삭제")) {
-				mem.delete();
+//				mem.delete();
 			}
 		}
 	}

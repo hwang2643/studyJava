@@ -15,6 +15,7 @@ public class SocialBoard extends MemberLogin{
 	static String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	static String dbId = "project";
 	static String dbPw = "p1234";
+	static int bnoNum;
 	
 	public void socialWrite() throws Exception {
          Class.forName(driver);
@@ -41,13 +42,37 @@ public class SocialBoard extends MemberLogin{
 	public void socialCommentWrite() throws Exception {
 		Class.forName(driver);
         Connection conn = DriverManager.getConnection(url, dbId, dbPw);
-        String sql = "";
+        String sqlAll = " SELECT MAX(rno) FROM social_comment WHERE bno=?";
+        PreparedStatement pstmt1 = conn.prepareStatement(sqlAll);
+        pstmt1.setInt(1, bnoNum);
+        ResultSet rs = pstmt1.executeQuery();
+        int rno = rs.getInt("MAX(rno)");
+//        while(rs.next()) {
+//        	rno = rs.getInt("rno");
+//        }
+        rs.close();
+        pstmt1.close();
+        int step = 0;
+        int rOrder = 1;
+        int ref = 1;
+        System.out.print("내용 입력: ");
+        String content = sc.nextLine();
+        String sql = " INSERT INTO social_comment(bno, rno, content, writer, w_date, step, r_order, ref)" +
+        			 "VALUES(?, ?, ?, ?, sysdate, ?, ?, ?)";
+        PreparedStatement pstmt2 = conn.prepareStatement(sql);
+        pstmt2.setInt(1, bnoNum);
+        pstmt2.setInt(2, rno);
+        pstmt2.setString(3, content);
+        pstmt2.setString(4, myId);
+        pstmt2.setInt(5, step);
+        pstmt2.setInt(6, rOrder);
+        pstmt2.setInt(7, ref);
+        
+        
 	}
-	public void socialAllSearch() throws Exception {
+	public void socialAllSearch(String search) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
-		System.out.print("작성자 검색 : ");
-		String search = sc.next();
 		String sql = " SELECT rownum, sb.bno, sb.title, m.name, m.nick_name, sb.w_date, sb.r_num"
 				   + " FROM member m, social_board sb, (SELECT rownum, sb.bno, m.id FROM social_board sb, member m WHERE sb.writer=m.id ORDER BY bno) rn"
 				   + " WHERE m.id=sb.writer AND rn.bno=sb.bno AND m.id=sb.writer AND rn.id=m.id AND (m.name LIKE ? OR m.nick_name LIKE ? OR sb.title LIKE ? OR sb.content LIKE ?)"
@@ -72,11 +97,9 @@ public class SocialBoard extends MemberLogin{
 		pstmt.close();
 		conn.close();
 	}
-	public void socialWriterSearch() throws Exception {
+	public void socialWriterSearch(String search) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
-		System.out.print("작성자 검색 : ");
-		String search = sc.next();
 		String sql = " SELECT rownum, sb.bno, sb.title, m.name, m.nick_name, sb.w_date, sb.r_num"
 				   + " FROM member m, social_board sb, (SELECT rownum, sb.bno, m.id FROM social_board sb, member m WHERE sb.writer=m.id ORDER BY bno) rn"
 				   + " WHERE m.id=sb.writer AND rn.bno=sb.bno AND m.id=sb.writer AND rn.id=m.id AND (m.name LIKE ? OR m.nick_name LIKE ?)"
@@ -99,11 +122,10 @@ public class SocialBoard extends MemberLogin{
 		pstmt.close();
 		conn.close();
 	}
-	public void socialContentSearch() throws Exception {
+	public void socialContentSearch(String search) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		System.out.print("내용 검색 : ");
-		String search = sc.nextLine();
 		String sql = " SELECT rownum, sb.bno, sb.title, m.name, m.nick_name, sb.w_date, sb.r_num" +
 					 " FROM social_board sb, member m, (SELECT rownum, bno FROM social_board ORDER BY bno) rn" +
 					 " WHERE sb.writer=m.id AND rn.bno=sb.bno AND sb.content LIKE ?" +
@@ -125,11 +147,9 @@ public class SocialBoard extends MemberLogin{
 		pstmt.close();
 		conn.close();
 	}
-	public void socialTitleSearch() throws Exception {
+	public void socialTitleSearch(String search) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
-		System.out.print("제목 검색 : ");
-		String search = sc.nextLine();
 		String sql = " SELECT rownum, sb.bno, sb.title, m.name, m.nick_name, sb.w_date, sb.r_num" +
 					 " FROM social_board sb, member m, (SELECT rownum, bno FROM social_board ORDER BY bno) rn" +
 					 " WHERE sb.writer=m.id AND rn.bno=sb.bno AND sb.title LIKE ?" +
@@ -190,7 +210,7 @@ public class SocialBoard extends MemberLogin{
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		PreparedStatement pstmt2 = conn.prepareStatement(sqlC);
 		System.out.print("게시판 번호 입력 : ");
-		int bnoNum = sc.nextInt();
+		bnoNum = sc.nextInt();
 		pstmt.setInt(1, bnoNum);
 		pstmt2.setInt(1, bnoNum);
 		ResultSet rs = pstmt.executeQuery();

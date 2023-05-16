@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.Scanner;
 
 class Category {
-	public void searchType() throws Exception {
+	public void searchType(String type) throws Exception {
 		Scanner sc = new Scanner(System.in);
 		String driver = "oracle.jdbc.driver.OracleDriver";
  		String url = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -18,8 +18,6 @@ class Category {
  		// 1) Connection 객체.
  		Connection conn = DriverManager.getConnection(url, dbId, dbPw);
  		// 2) PreparedStatement
- 		System.out.print("타입 선택 : ");
- 		String type = sc.next();
  		String sql = " SELECT goods_img, goods_name, price, new, best, sale" + 
  					 " FROM goods" +
  					 " WHERE type=?" + 
@@ -47,6 +45,5 @@ class Category {
 public class ShopCategoryPage {
 	public static void main(String[] args) throws Exception {
 		Category c = new Category();
-		c.searchType();
 	}
 }
