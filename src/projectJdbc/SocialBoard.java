@@ -17,56 +17,39 @@ public class SocialBoard extends MemberLogin{
 	static String dbPw = "p1234";
 	static int bnoNum;
 	
-	public void socialWrite() throws Exception {
+	public void socialWrite(String title, String content) throws Exception {
          Class.forName(driver);
          Connection conn = DriverManager.getConnection(url, dbId, dbPw);
-         System.out.print("제목 : ");
-         String title = sc.next();
-         System.out.print("내용 : ");
-         String content = sc.next();
-         String sql = "select bno from social_board ORDER BY bno";
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery();
-         String sql2 = " INSERT INTO social_board(bno, writer, title, content, w_date, r_num, good, bad)"
+         String sql = " INSERT INTO social_board(bno, writer, title, content, w_date, r_num, good, bad)"
                      + " VALUES(seq_social.nextval, ?, ?, ?, sysdate, 0, 0, 0)";
-         PreparedStatement pstmt2 = conn.prepareStatement(sql2);
-         pstmt2.setString(1, myId);
-         pstmt2.setString(2, title);
-         pstmt2.setString(3, content);
-         pstmt2.executeUpdate(); 
-         pstmt2.close();
-         rs.close();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         pstmt.setString(1, myId);
+         pstmt.setString(2, title);
+         pstmt.setString(3, content);
+         pstmt.executeUpdate(); 
          pstmt.close();
          conn.close();
 	}
-	public void socialCommentWrite() throws Exception {
+	public void socialCommentWrite(String content, int bnoNum) throws Exception {
 		Class.forName(driver);
         Connection conn = DriverManager.getConnection(url, dbId, dbPw);
-        String sqlAll = " SELECT MAX(rno) FROM social_comment WHERE bno=?";
-        PreparedStatement pstmt1 = conn.prepareStatement(sqlAll);
-        pstmt1.setInt(1, bnoNum);
-        ResultSet rs = pstmt1.executeQuery();
-        int rno = rs.getInt("MAX(rno)");
-//        while(rs.next()) {
-//        	rno = rs.getInt("rno");
-//        }
-        rs.close();
-        pstmt1.close();
+        String insert = " INSERT INTO social_comment(rno, bno, content, writer, step, r_order, ref, w_date)" +
+        				" VALUES(seq_social_comment.nextval, ?, ?, ?, ?, ?, ?, sysdate)";
+        PreparedStatement pstmt = conn.prepareStatement(insert);
         int step = 0;
-        int rOrder = 1;
-        int ref = 1;
-        System.out.print("내용 입력: ");
-        String content = sc.nextLine();
-        String sql = " INSERT INTO social_comment(bno, rno, content, writer, w_date, step, r_order, ref)" +
-        			 "VALUES(?, ?, ?, ?, sysdate, ?, ?, ?)";
-        PreparedStatement pstmt2 = conn.prepareStatement(sql);
-        pstmt2.setInt(1, bnoNum);
-        pstmt2.setInt(2, rno);
-        pstmt2.setString(3, content);
-        pstmt2.setString(4, myId);
-        pstmt2.setInt(5, step);
-        pstmt2.setInt(6, rOrder);
-        pstmt2.setInt(7, ref);
+        int rOrder = 0;
+        int ref = 0;
+        pstmt.setInt(1, bnoNum);
+        pstmt.setString(2, content);
+        pstmt.setString(3, myId);
+        String sqlStep = "SELECT rno FROM social_comment WHERE bno=?";
+        PreparedStatement pstmt2 = conn.prepareStatement(sqlStep);
+        ResultSet rs2 = pstmt2.executeQuery();
+        pstmt.setInt(4, step);
+        pstmt.setInt(5, rOrder);
+        pstmt.setInt(6, ref);
+        pstmt.close();
+        conn.close();
         
         
 	}
@@ -197,7 +180,7 @@ public class SocialBoard extends MemberLogin{
 		pstmt.close();
 		conn.close();
 	}
-	public void socialDetail() throws Exception {
+	public void socialDetail(int bnoNum) throws Exception {
 		Class.forName(driver);					
 		Connection conn = DriverManager.getConnection(url,dbId,dbPw);
 		String sql = " SELECT sb.title, m.name, m.nick_name, sb.w_date, sb.content, sb.good, sb.bad" +
@@ -209,8 +192,6 @@ public class SocialBoard extends MemberLogin{
 					  " ORDER BY sc.r_order";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		PreparedStatement pstmt2 = conn.prepareStatement(sqlC);
-		System.out.print("게시판 번호 입력 : ");
-		bnoNum = sc.nextInt();
 		pstmt.setInt(1, bnoNum);
 		pstmt2.setInt(1, bnoNum);
 		ResultSet rs = pstmt.executeQuery();

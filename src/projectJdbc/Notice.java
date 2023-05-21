@@ -6,12 +6,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
-public class Notice {
+public class Notice extends MemberLogin{
+	Notice(String myId, String myPw, boolean lb) {
+		super(myId, myPw, lb);
+	}
 	static Scanner sc = new Scanner(System.in);
 	static String driver = "oracle.jdbc.driver.OracleDriver";
 	static String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	static String dbId = "project";
 	static String dbPw = "p1234";
+	public void noticeOperatorWriter(String title, String content) throws Exception {
+		Class.forName(driver);
+ 		// 1) Connection 객체.
+ 		Connection conn = DriverManager.getConnection(url, dbId, dbPw);
+        String sql = "INSERT INTO notice(bno, title, content, w_date)" +
+        			  "VALUES(seq_notice.nextval, ?, ?, sysdate)";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, title);
+        pstmt.setString(2, content);
+        if(myId.equals("operator")) {
+        	pstmt.executeUpdate();
+        }
+        pstmt.close();
+        conn.close();
+        
+	}
 	public void noticeMain() throws Exception {
  		Class.forName(driver);
  		// 1) Connection 객체.

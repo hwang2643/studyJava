@@ -6,13 +6,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
-public class Photo {
+public class Photo extends MemberLogin {
+	Photo(String myId, String myPw, boolean lb) {
+		super(myId, myPw, lb);
+	}
 	static Scanner sc = new Scanner(System.in);
 	static String driver = "oracle.jdbc.driver.OracleDriver";
 	static String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	static String dbId = "project";
 	static String dbPw = "p1234";
-	public void photoAll() throws Exception  {
+	public void photoOperatorWrite(String title, String img, String category) throws Exception {
+		Class.forName(driver);
+ 		Connection conn = DriverManager.getConnection(url, dbId, dbPw);
+ 		String sql = "INSERT INTO photo(bno, title, r_date, img, category)" +
+ 					 "VALUES(seq_photo.nextval, ?, sysdate, ?, ?)";
+ 		PreparedStatement pstmt = conn.prepareStatement(sql);
+ 		pstmt.setString(1, title);
+ 		pstmt.setString(2, img);
+ 		pstmt.setString(3, category);
+ 		if(myId.equals("operator")) {
+ 			pstmt.executeUpdate();
+ 		}
+ 		pstmt.close();
+ 		conn.close();
+	}
+	public void photoAll() throws Exception {
 		Class.forName(driver);
  		// 1) Connection 객체.
  		Connection conn = DriverManager.getConnection(url, dbId, dbPw);
@@ -72,7 +90,5 @@ public class Photo {
  		rs.close();
  		pstmt.close();
  		conn.close();
- 		
- 		
 	}
 }
