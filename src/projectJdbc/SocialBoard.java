@@ -30,28 +30,76 @@ public class SocialBoard extends MemberLogin{
          pstmt.close();
          conn.close();
 	}
-	public void socialCommentWrite(String content, int bnoNum) throws Exception {
+	public int[] socialCommentRef(int bnoNum, int rowNum) throws Exception {
+		Class.forName(driver);
+        Connection conn = DriverManager.getConnection(url, dbId, dbPw);
+        String sql = " SELECT * FROM social_comment";
+        String rowCount = " sc, (SELECT rownum rnum, sc.rno FROM social_comment sc, (SELECT rno FROM social_comment ORDER BY rno) rn" + 
+        				  " WHERE sc.rno=rn.rno AND step=0 AND bno=?) rn" + 
+        				  " WHERE sc.rno=rn.rno AND step=0 AND rnum=?";
+        int step = 0;
+        int ref = 0;
+        int currRno = 0;
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        if(rowNum>=1) {
+        	pstmt = conn.prepareStatement(sql += rowCount);
+        	pstmt.setInt(1, bnoNum);
+        	pstmt.setInt(2, rowNum);
+        	step = 1;
+        }
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()) {
+        	ref = rs.getInt("rno");
+        	currRno = rs.getInt("seq_social_comment.currval");
+        }
+        int[] arr = new int[3];
+        arr[0] = ref;
+        arr[1] = step;
+        arr[2] = currRno;
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return arr;
+	}
+	public int socialCommentROrder(int bnoNum, int[] arr) throws Exception {
+		Class.forName(driver);
+        Connection conn = DriverManager.getConnection(url, dbId, dbPw);
+        String rOrder = " SELECT MAX(r_order) FROM social_comment WHERE bno=? AND ref=?";
+        PreparedStatement pstmt = conn.prepareStatement(rOrder);
+        pstmt.setInt(1, bnoNum);
+        pstmt.setInt(2, arr[0]);
+        int maxROrder = 1;
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()) {
+        	maxROrder = rs.getInt("MAX(r_order)");
+        }
+        rs.close();
+        pstmt.close();
+        return maxROrder;
+	}
+	public void socialCommentWrite(String content, int bnoNum, int rowNum) throws Exception {
 		Class.forName(driver);
         Connection conn = DriverManager.getConnection(url, dbId, dbPw);
         String insert = " INSERT INTO social_comment(rno, bno, content, writer, step, r_order, ref, w_date)" +
-        				" VALUES(seq_social_comment.nextval, ?, ?, ?, ?, ?, ?, sysdate)";
+        				"VALUES(seq_social_comment.nextval, ?, ?, ?, ?, ?, ?, sysdate)";
         PreparedStatement pstmt = conn.prepareStatement(insert);
-        int step = 0;
-        int rOrder = 0;
-        int ref = 0;
+        int[] arr = socialCommentRef(bnoNum, rowNum);
+        int step = arr[1];
+        int rOrder = 1;
+        int ref = arr[0];
         pstmt.setInt(1, bnoNum);
         pstmt.setString(2, content);
         pstmt.setString(3, myId);
-        String sqlStep = "SELECT rno FROM social_comment WHERE bno=?";
-        PreparedStatement pstmt2 = conn.prepareStatement(sqlStep);
-        ResultSet rs2 = pstmt2.executeQuery();
         pstmt.setInt(4, step);
         pstmt.setInt(5, rOrder);
-        pstmt.setInt(6, ref);
+        if(rowNum>=1) {
+        	pstmt.setInt(6, ref);
+        }else {
+        	pstmt.setInt(6, ref+1);
+        }
+        pstmt.executeUpdate();
         pstmt.close();
         conn.close();
-        
-        
 	}
 	public void socialAllSearch(String search) throws Exception {
 		Class.forName(driver);					
@@ -189,7 +237,7 @@ public class SocialBoard extends MemberLogin{
 		String sqlC = " SELECT m.name, m.nick_name, sc.w_date, sc.content, sc.step" +
 					  " FROM member m, social_comment sc" + 
 					  " WHERE m.id=sc.writer AND bno=?" + 
-					  " ORDER BY sc.r_order";
+					  " ORDER BY sc.ref, sc.w_date";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		PreparedStatement pstmt2 = conn.prepareStatement(sqlC);
 		pstmt.setInt(1, bnoNum);
